@@ -1,0 +1,132 @@
+<ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
+  <li class="dropdown-header">Dropdown header</li>
+  <li class="dropdown-header">Dropdown header</li>
+  <li class="dropdown-header">Dropdown header</li>
+</ul>
+
+<section class="container container_entire">
+  <div class="row flex_center">
+    <div class = "flex center_vertically">
+      <label class="center_vertically green_text">Sale value:</label>
+      <div class="input-group short_input margin_left_short">
+        <span class="input-group-addon">$</span>
+        <input type="number" step="any" class="form-control green_text" min="0" [(ngModel)]="sale_value">
+      </div>
+    </div>
+
+    <div class = "flex center_vertically">
+      <label class="red_text center_vertically margin_left_long">eBay fee percent:</label>
+
+      <div class="input-group short_input margin_left_short">
+        <span class="input-group-addon">$</span>
+        <input type="number" step="any" class="form-control red_text" min="0" [(ngModel)]="ebay_fee_percent">
+      </div>
+    </div>
+
+    <div class = "margin_left_long red_text border_red_background">
+      <table>
+        <tr>
+          <td class = "text_align_right">eBay fee =&nbsp;</td>
+          <td> {{get_ebay_fee() | number : '1.2-2'}}</td> <!-- pipe = 1 digit in front of dec. At least 2 digit after, No more than 2 digit aft -->
+        </tr>
+        <tr>
+          <td class = "text_align_right">PayPal fee =&nbsp;</td>
+          <td > {{get_paypal_fee() | number : '1.2-2'}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="row flex">
+    <label class="red_text center_vertically">Product Cost:</label>
+    <div class="margin_left">
+      <div class="btn-toolbar margin_top_small" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+          <button type="button" class="btn btn-secondary btn_border" (click)="mult_by_response(2)">2x</button>
+          <button type="button" class="btn btn-secondary btn_border" (click)="mult_by_response(3)">3x</button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+          <button type="button" class="btn btn-secondary btn_border" (click)="mult_by_response(1/2)">1/2</button>
+          <button type="button" class="btn btn-secondary btn_border" (click)="mult_by_response(1/3)">1/3</button>
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="input-group short_input center_horizontally">
+          <span class="input-group-addon">$</span>
+          <input type="number" step="any" class="form-control red_text" min="0" [(ngModel)]="cost_product">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class = "row flex margin_top red_text">
+    <label class ="center_vertically">Shipping Type:</label>
+    <select class = "margin_left_short red_text" (change)="ship_change_response($event.target.value)">
+      <option *ngFor="let ship_option of ship_option_array">{{ship_option}}</option>
+    </select>
+
+    <div class = "margin_left_long" *ngIf="show_first_class_shipping">
+      <label>Weight (oz):</label>
+      <select class = "red_text" (change)="first_class_weight_response($event.target.value)">
+        <option *ngFor="let weight of oz_first_class_array" [selected]="weight === first_class_weight">{{weight}}</option>
+      </select>
+    </div>
+    <label class = "margin_left center_vertically">$</label>
+    <label class="center_vertically">{{cost_shipping  | number : '1.2-2'}}</label>
+
+    <app-box-weight-popover class = "margin_left"></app-box-weight-popover>
+  </div>
+
+  <hr>
+  <div class="row flex margin_top">
+    <div class = "font_size_med" [ngClass]="(get_final_profit() >= 0.50)?'border_green_background':'border_red_background'">
+      <p class = "text_align_center bold_underline">Calculation</p>
+      <table class = "margin_top">
+        <tbody style="border-bottom:2px solid black">
+        <tr class="green_text">
+          <td>+</td>
+          <td class="text_align_right padding_left_small">{{sale_value | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(Sale Value)</td>
+        </tr>
+        <tr class="red_text">
+          <td>-</td>
+          <td class="text_align_right padding_left_small">{{get_ebay_fee() | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(eBay fee)</td>
+        </tr>
+        <tr class="red_text">
+          <td>-</td>
+          <td class="text_align_right padding_left_small">{{get_paypal_fee() | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(PayPal fee)</td>
+        </tr>
+        <tr class="red_text">
+          <td>-</td>
+          <td class="text_align_right padding_left_small">{{cost_product | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(Product cost)</td>
+        </tr>
+        <tr class="red_text">
+          <td>-</td>
+          <td class="text_align_right padding_left_small">{{cost_shipping | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(Ship fee)</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
+            {{get_final_profit() >= 0.00?'+':'-'}}
+          </td>
+          <td class="text_align_right padding_left_small" [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
+            {{get_absolute( get_final_profit() ) | number : '1.2-2'}}
+          </td>
+          <td class = "padding_left_small" [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
+            (Final profit)
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+

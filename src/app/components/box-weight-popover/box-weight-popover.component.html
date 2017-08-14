@@ -1,0 +1,7 @@
+<!-- This template allows for line break-->
+<ng-template #popContent>6x6x2 box = 2.85oz
+  <br>8x6x4 box = 3.50oz</ng-template>
+
+<button type="button" class="btn btn-outline-secondary info_box"
+        [ngbPopover]="popContent" triggers="mouseenter:mouseleave"
+        popoverTitle="Box Weight Info">?</button>
