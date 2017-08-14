@@ -1,6 +1,6 @@
 https://github.com/angular/angular-cli/wiki/stories
 
-##### B. Setting up info #####
+##### A. How project was set up info #####
   * Creating Project:
       1) Navigate to folder for desired location of project.
       2) Open cmd.exe
