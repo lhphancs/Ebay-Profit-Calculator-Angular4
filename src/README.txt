@@ -33,27 +33,29 @@ https://github.com/angular/angular-cli/wiki/stories
 
 ##### B. How I deployed on heroku.com #####
 // Used portions of: https://www.youtube.com/watch?v=MUdFLxveBzI&t=602s
-  1) Modify package.json
+
+  1) Install "heroku CLI"
+  2) Modify package.json
     ii)   Add node version by adding following lines:
             "engines": {
                  "node": "[6.11.1"]
 
                },"
           //Replace "6.11.1" with actual version. Can find version by typing "node -v" in terminal. NOTE: Do not need to include "v" in "v8.2.1"
-  2) install express
+  3) install express
     i)    Navigate to [project_name] directory
     ii)   Open terminal
     iii)  Enter following command(without quotes):
             "npm install express"
           //Note: This will create dependency in package.json for express
-  3) Build project
+  4) Build project
     i)    Navigate to [project_name] directory
     ii)   Open terminal
     iii)  Enter following command(without quotes):
             "ng build --prod"
           This will create a folder called "dist"
 
-  4) Package folder together
+  5) Package folder together
     i)    Create a new folder called [projectName]
     ii)   Place your built "dist" folder inside [projectName]
     iii)  Rename "dist" to "public"
