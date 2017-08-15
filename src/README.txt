@@ -32,6 +32,7 @@ https://github.com/angular/angular-cli/wiki/stories
               })
 
 ##### B. How I deployed on heroku.com #####
+// Used portions of: https://www.youtube.com/watch?v=MUdFLxveBzI&t=602s
   1) Modify package.json
     ii)   Add node version by adding following lines:
             "engines": {
