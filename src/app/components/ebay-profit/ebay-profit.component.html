@@ -27,11 +27,11 @@
       <table>
         <tr>
           <td class = "text_align_right">eBay fee =&nbsp;</td>
-          <td> {{get_ebay_fee() | number : '1.2-2'}}</td> <!-- pipe = 1 digit in front of dec. At least 2 digit after, No more than 2 digit aft -->
+          <td> {{this.costDataService.get_ebay_fee(this.sale_value, this.ebay_fee_percent) | number : '1.2-2'}}</td> <!-- pipe = 1 digit in front of dec. At least 2 digit after, No more than 2 digit aft -->
         </tr>
         <tr>
           <td class = "text_align_right">PayPal fee =&nbsp;</td>
-          <td > {{get_paypal_fee() | number : '1.2-2'}}</td>
+          <td > {{this.costDataService.get_paypal_fee(this.sale_value) | number : '1.2-2'}}</td>
         </tr>
       </table>
     </div>
@@ -81,7 +81,11 @@
 
   <hr>
   <div class="row flex margin_top">
-    <div class = "font_size_med" [ngClass]="(get_final_profit() >= 0.50)?'border_green_background':'border_red_background'">
+    <div class = "font_size_med" [ngClass]
+      ="(this.costDataService.get_final_profit(this.sale_value
+      , this.ebay_fee_percent, this.cost_product, this.cost_shipping)
+      >= 0.50)?'border_green_background':'border_red_background'">
+
       <p class = "text_align_center bold_underline">Calculation</p>
       <table class = "margin_top">
         <tbody style="border-bottom:2px solid black">
@@ -92,12 +96,17 @@
         </tr>
         <tr class="red_text">
           <td>-</td>
-          <td class="text_align_right padding_left_small">{{get_ebay_fee() | number : '1.2-2'}}</td>
+          <td class="text_align_right padding_left_small">{{this.costDataService
+            .get_ebay_fee(this.sale_value, this.ebay_fee_percent) | number : '1.2-2'}}</td>
+
           <td class = "padding_left_small">(eBay fee)</td>
         </tr>
         <tr class="red_text">
           <td>-</td>
-          <td class="text_align_right padding_left_small">{{get_paypal_fee() | number : '1.2-2'}}</td>
+          <td class="text_align_right padding_left_small" >
+            {{this.costDataService.get_paypal_fee(this.sale_value)
+            | number : '1.2-2'}}</td>
+
           <td class = "padding_left_small">(PayPal fee)</td>
         </tr>
         <tr class="red_text">
@@ -113,13 +122,24 @@
         </tbody>
         <tfoot>
         <tr>
-          <td [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
-            {{get_final_profit() >= 0.00?'+':'-'}}
+          <td [ngClass]="(this.costDataService.get_final_profit(
+          this.sale_value, this.ebay_fee_percent, this.cost_product
+          , this.cost_shipping) >= 0.00)?'green_text':'red_text'">
+            {{this.costDataService.get_final_profit(
+            this.sale_value, this.ebay_fee_percent, this.cost_product
+            , this.cost_shipping) >= 0.00?'+':'-'}}
           </td>
-          <td class="text_align_right padding_left_small" [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
-            {{get_absolute( get_final_profit() ) | number : '1.2-2'}}
+
+          <td class="text_align_right padding_left_small" [ngClass]="(this.costDataService.get_final_profit(
+          this.sale_value, this.ebay_fee_percent, this.cost_product
+          , this.cost_shipping) >= 0.00)?'green_text':'red_text'">
+            {{get_absolute( this.costDataService.get_final_profit(
+            this.sale_value, this.ebay_fee_percent, this.cost_product
+            , this.cost_shipping) ) | number : '1.2-2'}}
           </td>
-          <td class = "padding_left_small" [ngClass]="(get_final_profit() >= 0.00)?'green_text':'red_text'">
+          <td class = "padding_left_small" [ngClass]="(this.costDataService.get_final_profit(
+          this.sale_value, this.ebay_fee_percent, this.cost_product
+          , this.cost_shipping) >= 0.00)?'green_text':'red_text'">
             (Final profit)
           </td>
         </tr>

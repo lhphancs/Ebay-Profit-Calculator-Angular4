@@ -21,7 +21,9 @@ export class EbayProfitComponent implements OnInit {
 
   show_first_class_shipping: boolean;
   show_box_info: boolean;
-  constructor(private costDataService: CalculationService) {
+  costDataService;
+  constructor(private service: CalculationService) {
+    this.costDataService = service;
     this.ebay_fee_percent = 9.15;
     this.paypal_fee_percent = 3;
     this.oz_first_class_array = Array(16); // [1,2, ... 15, 16]
@@ -44,22 +46,7 @@ export class EbayProfitComponent implements OnInit {
 
   first_class_weight_response(weight) {
     this.first_class_weight = Number(weight); // Converts string to number
-
-    switch (this.first_class_weight) {
-      case 1: case 2: case 3: case 4: this.cost_shipping = 2.61; break;
-      case 5: case 6: case 7: case 8: this.cost_shipping = 2.77; break;
-      case 9:     this.cost_shipping = 3.32; break;
-      case 10:    this.cost_shipping = 3.46; break;
-      case 11:    this.cost_shipping = 3.60; break;
-      case 12:    this.cost_shipping = 3.74; break;
-      case 13:    this.cost_shipping = 3.88; break;
-      case 14:    this.cost_shipping = 4.02; break;
-      case 15:    this.cost_shipping = 4.16; break;
-      case 16:    this.cost_shipping = 4.30; break;
-      default:
-        this.cost_shipping = -1;
-        alert('ERROR: get_usps_first_class_cost function...invalid weight for switch/case');
-    }
+    this.cost_shipping = this.costDataService.get_first_class_shipping_cost(this.first_class_weight);
   }
 
   ship_change_response(ship_option) {
@@ -74,21 +61,6 @@ export class EbayProfitComponent implements OnInit {
 
   mult_by_response(number) {
     this.cost_product *= number;
-  }
-
-  get_ebay_fee() {
-    return this.sale_value * this.ebay_fee_percent * 0.01;
-  }
-
-  get_paypal_fee() {
-    const PAYPAL_PERCENT = 3;
-    return 0.30 + this.sale_value * PAYPAL_PERCENT * 0.01;
-  }
-
-  get_final_profit() {
-    return this.sale_value - this.get_ebay_fee()
-      - this.get_paypal_fee() - this.cost_product
-      - this.cost_shipping;
   }
 
   get_absolute(value) {
