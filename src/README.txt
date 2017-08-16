@@ -19,9 +19,9 @@ https://github.com/angular/angular-cli/wiki/stories
         ng g service services/[serviceName] //We created a folder called "services" in app folder
       2) Add it to app.module.ts:
         i) Add following two lines:
-          import { GetShippingCostService } from './services/get-shipping-cost.service';
+          import { CalculationService } from './services/calculation.service';
           ...
-          providers: [GetShippingCostService],
+          providers: [CalculationService],
           ...
       3) Then to use, go to your component, import it, and then add the dependency into the constructor
 
