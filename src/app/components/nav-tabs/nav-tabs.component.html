@@ -2,17 +2,16 @@
   <div class="row">
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Ebay</a>
+        <a routerLink = "ebay-profit" router class="nav-link active">Ebay</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Amazon</a>
+        <a routerLink = "amazon-profit" class="nav-link">Amazon</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Shopify</a>
+        <a routerLink = "shopify-profit" class="nav-link">Shopify</a>
       </li>
     </ul>
   </div>
-
-  <a class = "main_page_logo" href="https://www.ebay.com" target="_blank">
-    <img src="../../../assets/img/ebay_logo.png"/></a>
 </header>
+
+<router-outlet></router-outlet>

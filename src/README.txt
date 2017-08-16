@@ -25,6 +25,20 @@ https://github.com/angular/angular-cli/wiki/stories
           ...
       3) Then to use, go to your component, import it, and then add the dependency into the constructor
 
+  * Creating Router: // https://www.youtube.com/watch?v=L6ipgij-AUw
+      1) Similar to aboves. Add following to app.modules.ts: //Note import requires an array in argument
+        import { RouterModule} from '@angular/router';
+        ...
+        imports: [
+            ..., RouterModule.forRoot([
+              {
+                path: 'ebay_profit',
+                component: EbayProfitComponent
+              },
+              ...//Add other components
+            ])
+        ...
+
   * Including bootstrap:
       1) Follow https://github.com/angular/angular-cli/wiki/stories-include-bootstrap#include-bootstrap
 
