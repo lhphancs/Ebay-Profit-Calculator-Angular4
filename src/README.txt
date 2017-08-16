@@ -4,16 +4,26 @@ https://github.com/angular/angular-cli/wiki/stories
   * Creating Project:
       1) Navigate to folder for desired location of project.
       2) Open terminal
-      3) Enter command below(without quotes):
-        i) "ng new [project_name]"
-      4)
+      3) Enter command below:
+        ng new [project_name]
 
   * Creating Component:
       1) Navigate to [project_name] directory
       2) In app folder, create directory called "components" (This is just for organization, so all our components are in one place)
-      2) Enter command below(without quotes):
-        i) "ng g component components/[componentName]"
+      2) Enter command below:
+        ng g component components/[componentName] //We created a folder called "components" in app folder
       //This handles the import and declaration so you don't have to do manually
+
+  * Creating Service:
+      1) Similar to "Creating Component" steps above, but instead use:
+        ng g service services/[serviceName] //We created a folder called "services" in app folder
+      2) Add it to app.module.ts:
+        i) Add following two lines:
+          import { GetShippingCostService } from './services/get-shipping-cost.service';
+          ...
+          providers: [GetShippingCostService],
+          ...
+      3) Then to use, go to your component, import it, and then add the dependency into the constructor
 
   * Including bootstrap:
       1) Follow https://github.com/angular/angular-cli/wiki/stories-include-bootstrap#include-bootstrap
@@ -37,22 +47,22 @@ https://github.com/angular/angular-cli/wiki/stories
   1) Install "heroku CLI"
   2) Modify package.json
     ii)   Add node version by adding following lines:
-            "engines": {
+            ..., engines": {
                  "node": "[6.11.1"]
 
-               },"
+               }, ...
           //Replace "6.11.1" with actual version. Can find version by typing "node -v" in terminal. NOTE: Do not need to include "v" in "v8.2.1"
   3) install express
     i)    Navigate to [project_name] directory
     ii)   Open terminal
-    iii)  Enter following command(without quotes):
-            "npm install express"
+    iii)  Enter following command:
+            npm install express
           //Note: This will create dependency in package.json for express
   4) Build project
     i)    Navigate to [project_name] directory
     ii)   Open terminal
-    iii)  Enter following command(without quotes):
-            "ng build --prod"
+    iii)  Enter following command:
+            ng build --prod
           This will create a folder called "dist"
 
   5) Package folder together
@@ -61,8 +71,8 @@ https://github.com/angular/angular-cli/wiki/stories
     iii)  Rename "dist" to "public"
     iii)  Place the project's package.json into [projectName]
     iv)   In [projectName] folder, create a file called "Procfile" //Note no extension
-      a)    Add the following line and save (without quotes):
-              "web: node index.js"
+      a)    Add the following line and save:
+              web: node index.js
     v)    In [projectName], include "index.js" //This file can be found in heroku's sample app. "https://github.com/heroku/node-js-getting-started.git"
 
     vi)   Create a new app on heroku.com (I called it profit-calculator)

@@ -5,21 +5,23 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import { CalculatorComponent } from './components/calculator/calculator.component';
+import { EbayProfitComponent } from './components/ebay-profit/ebay-profit.component';
 import { BoxWeightPopoverComponent } from './components/box-weight-popover/box-weight-popover.component';
 import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
+
+import { CalculationService } from './services/calculation.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CalculatorComponent,
     BoxWeightPopoverComponent,
-    NavTabsComponent
+    NavTabsComponent,
+    EbayProfitComponent
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule.forRoot()
   ],
-  providers: [],
+  providers: [CalculationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
