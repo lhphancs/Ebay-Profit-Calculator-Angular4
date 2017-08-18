@@ -35,7 +35,7 @@ export class EbayProfitComponent implements OnInit {
     this.cost_flat_rate_dict = {'USPS Flat rate padded envelope': 6.30
       , 'USPS Flat rate small box': 6.25, 'USPS Flat rate medium box': 12.05, 'USPS Flat rate large box': 16.55};
     this.first_class_weight = 8;
-    this.first_class_weight_response(this.first_class_weight);
+    this.response_first_class_weight(this.first_class_weight);
 
     this.show_first_class_shipping = true;
     this.show_box_info = false;
@@ -44,22 +44,22 @@ export class EbayProfitComponent implements OnInit {
   ngOnInit() {
   }
 
-  first_class_weight_response(weight) {
+  response_first_class_weight(weight) {
     this.first_class_weight = Number(weight); // Converts string to number
     this.cost_shipping = this.costDataService.get_first_class_shipping_cost(this.first_class_weight);
   }
 
-  ship_change_response(ship_option) {
+  response_ship_change(ship_option) {
     if (ship_option === this.ship_option_array[0]) {
       this.show_first_class_shipping = true;
-      this.first_class_weight_response(this.first_class_weight);
+      this.response_first_class_weight(this.first_class_weight);
     } else {
       this.show_first_class_shipping = false;
       this.cost_shipping = this.cost_flat_rate_dict[ship_option];
     }
   }
 
-  mult_by_response(number) {
+  response_mult_by(number) {
     this.cost_product *= number;
   }
 
