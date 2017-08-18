@@ -1,6 +1,13 @@
 <!-- This template allows for line break-->
-<ng-template #popContent>6x6x2 box = 2.85oz
-  <br>8x6x4 box = 3.50oz</ng-template>
+
+<ng-template #popContent>
+  <div class = "info_style1 padding">
+    6x6x2 box: 2.85oz
+  </div>
+  <div class = "info_style2 padding margin_top">
+    8x6x4 box: 3.50oz
+  </div>
+</ng-template>
 
 <button type="button" class="btn btn-outline-secondary info_box"
         [ngbPopover]="popContent" triggers="mouseenter:mouseleave"

@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class CalculationService {
-
-  constructor() { }
+  PAYPAL_PERCENT;
+  constructor() {
+    this.PAYPAL_PERCENT = 3;
+  }
 
   get_first_class_shipping_cost(weight: Number) {
     switch (weight) {
@@ -28,13 +30,15 @@ export class CalculationService {
   }
 
   get_paypal_fee(sale_value) {
-    const PAYPAL_PERCENT = 3;
-    return 0.30 + sale_value * PAYPAL_PERCENT * 0.01;
+    return 0.30 + sale_value * this.PAYPAL_PERCENT * 0.01;
   }
 
   get_final_profit(sale_value, cost_ebay_fee, cost_paypal_fee, cost_product, cost_shipping) {
     return sale_value - cost_ebay_fee - cost_paypal_fee - cost_product - cost_shipping;
   }
 
-
+  get_sale_value(ebay_fee_percent, cost_product, cost_shipping, final_profit) {
+    return (final_profit + cost_shipping + cost_product + 0.30)
+      / (1 - 0.01 * (ebay_fee_percent + this.PAYPAL_PERCENT) );
+  }
 }

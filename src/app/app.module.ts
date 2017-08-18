@@ -12,6 +12,7 @@ import { NavTabsComponent } from './components/nav-tabs/nav-tabs.component';
 import { CalculationService } from './services/calculation.service';
 import { AmazonProfitComponent } from './components/amazon-profit/amazon-profit.component';
 import { ShopifyProfitComponent } from './components/shopify-profit/shopify-profit.component';
+import { EbayPaypalFeePopoverComponent } from './components/ebay-paypal-fee-popover/ebay-paypal-fee-popover.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ShopifyProfitComponent } from './components/shopify-profit/shopify-prof
     NavTabsComponent,
     EbayProfitComponent,
     AmazonProfitComponent,
-    ShopifyProfitComponent
+    ShopifyProfitComponent,
+    EbayPaypalFeePopoverComponent
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule.forRoot(), RouterModule.forRoot([

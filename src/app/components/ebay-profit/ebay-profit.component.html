@@ -8,14 +8,21 @@
 </ul>
 
 <section class="container container_entire">
+  <div class="row">
+    <button type="button" class="btn btn-outline-primary"
+            (click)="toggle_mode()">{{is_profit_mode?'Find Sale Value':'Find Profit'}}</button>
+  </div>
   <div class="row flex_center">
-    <div class = "flex center_vertically">
+    <div class = "flex center_vertically" [ngClass]="{'border_green_background': !is_profit_mode}">
       <label class="center_vertically green_text">Sale value:</label>
-      <div class="input-group short_input margin_left_short">
+      <div class="input-group short_input margin_left_short" *ngIf="is_profit_mode;else lbl_sale_value">
         <span class="input-group-addon">$</span>
         <input type="number" step="any" class="form-control green_text" min="0"
                [(ngModel)]="sale_value" (input)="response_update_calculations()">
       </div>
+      <ng-template #lbl_sale_value>
+        <label class = "center_vertically green_text margin_left_short">{{sale_value | number : '1.2-2'}}</label>
+      </ng-template>
     </div>
 
     <div class = "flex center_vertically">
@@ -39,6 +46,8 @@
         </tr>
       </table>
     </div>
+
+    <app-ebay-paypal-fee-popover class = "margin_left center_vertically"></app-ebay-paypal-fee-popover>
   </div>
 
   <div class="row flex">
@@ -71,31 +80,31 @@
   </div>
 
 
-  <div class = "row flex margin_top red_text">
-    <label class ="center_vertically">Shipping Type:</label>
+  <div class = "row flex margin_top">
+    <label class ="center_vertically red_text">Shipping Type:</label>
     <select class = "margin_left_short red_text"
             (change)="response_ship_change($event.target.value); response_update_calculations()">
       <option *ngFor="let ship_option of ship_option_array">{{ship_option}}</option>
     </select>
 
     <div class = "margin_left_long" *ngIf="show_first_class_shipping">
-      <label>Weight (oz):</label>
+      <label class = "red_text">Weight (oz):</label>
       <select class = "red_text"
               (change)="response_first_class_weight($event.target.value); response_update_calculations()">
         <option *ngFor="let weight of oz_first_class_array"
                 [selected]="weight === first_class_weight">{{weight}}</option>
       </select>
     </div>
-    <label class = "margin_left center_vertically">$</label>
-    <label class="center_vertically">{{cost_shipping  | number : '1.2-2'}}</label>
+    <label class = "margin_left center_vertically red_text">$</label>
+    <label class="center_vertically red_text">{{cost_shipping  | number : '1.2-2'}}</label>
 
     <app-box-weight-popover class = "margin_left"></app-box-weight-popover>
   </div>
 
   <hr>
   <div class="row flex margin_top">
-    <div class = "font_size_med" [ngClass]
-      = "(final_profit >= 0.50)?'border_green_background':'border_red_background'">
+    <div class = "font_size_med"
+         [ngClass] = "!is_profit_mode? '':final_profit >= 0.50?'border_green_background':'border_red_background'">
       <p class = "text_align_center bold_underline">Calculation</p>
       <table class = "margin_top">
         <tbody style="border-bottom:2px solid black">
@@ -127,15 +136,24 @@
         </tbody>
         <tfoot>
         <tr>
-          <td [ngClass]="final_profit >= 0.00?'green_text':'red_text'">
-            {{final_profit >= 0.00?'+':'-'}}
+          <td [ngClass]="final_profit >= 0.00 || !is_profit_mode?'green_text':'red_text'">
+            {{!is_profit_mode || final_profit >= 0.00?'+':'-'}}
           </td>
 
           <td class="text_align_right padding_left_small"
-              [ngClass]="final_profit >= 0.00?'green_text':'red_text'">
+              [ngClass]="final_profit >= 0.00?'green_text':'red_text'"
+              *ngIf="is_profit_mode;else input_final_profit">
             {{get_absolute(final_profit) | number : '1.2-2'}}
           </td>
-          <td class = "padding_left_small" [ngClass]="final_profit >= 0.00?'green_text':'red_text'">
+          <ng-template #input_final_profit>
+            <div class="input-group short_input margin_left_short">
+              <span class="input-group-addon green_text">$</span>
+              <input type="number" step="any" class="form-control green_text" min="0"
+                     [(ngModel)]="final_profit" (input)="response_update_calculations()">
+            </div>
+          </ng-template>
+
+          <td class = "padding_left_small" [ngClass]="final_profit >= 0.00 || !is_profit_mode?'green_text':'red_text'">
             (Final profit)
           </td>
         </tr>

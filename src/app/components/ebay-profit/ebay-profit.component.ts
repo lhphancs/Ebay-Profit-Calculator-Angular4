@@ -24,11 +24,16 @@ export class EbayProfitComponent implements OnInit {
 
   show_first_class_shipping: boolean;
   show_box_info: boolean;
-  costDataService;
+  cost_data_service;
+  is_profit_mode: boolean;
   constructor(private service: CalculationService) {
-    this.costDataService = service;
+    this.cost_data_service = service;
     this.ebay_fee_percent = 9.15;
     this.paypal_fee_percent = 3;
+    this.cost_ebay_fee = NaN;
+    this.cost_paypal_fee = NaN;
+    this.sale_value = NaN;
+    this.cost_product = NaN;
     this.oz_first_class_array = Array(16); // [1,2, ... 15, 16]
     for (let i = 1; i <= 16; ++i) {
       this.oz_first_class_array[i - 1] = i;
@@ -42,6 +47,7 @@ export class EbayProfitComponent implements OnInit {
 
     this.show_first_class_shipping = true;
     this.show_box_info = false;
+    this.is_profit_mode = true;
   }
 
   ngOnInit() {
@@ -49,7 +55,7 @@ export class EbayProfitComponent implements OnInit {
 
   response_first_class_weight(weight) {
     this.first_class_weight = Number(weight); // Converts string to number
-    this.cost_shipping = this.costDataService.get_first_class_shipping_cost(this.first_class_weight);
+    this.cost_shipping = this.cost_data_service.get_first_class_shipping_cost(this.first_class_weight);
   }
 
   response_ship_change(ship_option) {
@@ -70,9 +76,22 @@ export class EbayProfitComponent implements OnInit {
     return Math.abs(value);
   }
   response_update_calculations() {
-    this.cost_ebay_fee = this.costDataService.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
-    this.cost_paypal_fee = this.costDataService.get_paypal_fee(this.sale_value);
-    this.final_profit = this.costDataService.get_final_profit(this.sale_value
-      , this.cost_ebay_fee, this.cost_paypal_fee, this.cost_product, this.cost_shipping);
+    // Order of execution matters depending on is_profit_mode
+    if (this.is_profit_mode) {
+      this.cost_ebay_fee = this.cost_data_service.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
+      this.cost_paypal_fee = this.cost_data_service.get_paypal_fee(this.sale_value);
+      this.final_profit = this.cost_data_service.get_final_profit(this.sale_value
+        , this.cost_ebay_fee, this.cost_paypal_fee, this.cost_product, this.cost_shipping);
+    } else {
+      this.sale_value = this.cost_data_service.get_sale_value(this.ebay_fee_percent
+        , this.cost_product, this.cost_shipping, this.final_profit);
+      this.cost_ebay_fee = this.cost_data_service.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
+      this.cost_paypal_fee = this.cost_data_service.get_paypal_fee(this.sale_value);
+    }
+  }
+  toggle_mode() {
+    this.is_profit_mode = !this.is_profit_mode;
+    this.final_profit = 1.00;
+    this.response_update_calculations(); // Needed to properly calculate needed sale value at start
   }
 }
