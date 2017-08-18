@@ -63,7 +63,6 @@ https://github.com/angular/angular-cli/wiki/stories
     ii)   Add node version by adding following lines:
             ..., "engines": {
                  "node": "[6.11.1"]
-
                }, ...
           //Replace "6.11.1" with actual version. Can find version by typing "node -v" in terminal. NOTE: Do not need to include "v" in "v8.2.1"
   3) install express
