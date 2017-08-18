@@ -61,7 +61,7 @@ https://github.com/angular/angular-cli/wiki/stories
   1) Install "heroku CLI"
   2) Modify package.json
     ii)   Add node version by adding following lines:
-            ..., engines": {
+            ..., "engines": {
                  "node": "[6.11.1"]
 
                }, ...
