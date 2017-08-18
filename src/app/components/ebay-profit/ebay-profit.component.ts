@@ -18,6 +18,9 @@ export class EbayProfitComponent implements OnInit {
 
   cost_product: number;
   cost_shipping: number;
+  cost_ebay_fee: number;
+  cost_paypal_fee: number;
+  final_profit: number;
 
   show_first_class_shipping: boolean;
   show_box_info: boolean;
@@ -65,5 +68,11 @@ export class EbayProfitComponent implements OnInit {
 
   get_absolute(value) {
     return Math.abs(value);
+  }
+  response_update_calculations() {
+    this.cost_ebay_fee = this.costDataService.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
+    this.cost_paypal_fee = this.costDataService.get_paypal_fee(this.sale_value);
+    this.final_profit = this.costDataService.get_final_profit(this.sale_value
+      , this.cost_ebay_fee, this.cost_paypal_fee, this.cost_product, this.cost_shipping);
   }
 }

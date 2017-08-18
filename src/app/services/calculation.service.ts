@@ -32,10 +32,8 @@ export class CalculationService {
     return 0.30 + sale_value * PAYPAL_PERCENT * 0.01;
   }
 
-  get_final_profit(sale_value, ebay_fee_percent, cost_product, cost_shipping) {
-    return sale_value - this.get_ebay_fee(sale_value, ebay_fee_percent)
-      - this.get_paypal_fee(sale_value) - cost_product
-      - cost_shipping;
+  get_final_profit(sale_value, cost_ebay_fee, cost_paypal_fee, cost_product, cost_shipping) {
+    return sale_value - cost_ebay_fee - cost_paypal_fee - cost_product - cost_shipping;
   }
 
 
