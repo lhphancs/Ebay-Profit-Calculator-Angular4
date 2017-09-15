@@ -1,61 +1,9 @@
-https://github.com/angular/angular-cli/wiki/stories
+##### Profit calculator usage notes #####
+  * Profit calculator assumes that buyer pays for shipping
+  * Shipping rates are based on eBay's rate as of 9/14/17
 
-##### A. How project was set up info #####
-  * Creating Project:
-      1) Navigate to folder for desired location of project.
-      2) Open terminal
-      3) Enter command below:
-        ng new [project_name]
 
-  * Creating Component:
-      1) Navigate to [project_name] directory
-      2) In app folder, create directory called "components" (This is just for organization, so all our components are in one place)
-      2) Enter command below:
-        ng g component components/[componentName] //We created a folder called "components" in app folder
-      //This handles the import and declaration so you don't have to do manually
-
-  * Creating Service:
-      1) Similar to "Creating Component" steps above, but instead use:
-        ng g service services/[serviceName] //We created a folder called "services" in app folder
-      2) Add it to app.module.ts:
-        i) Add following two lines:
-          import { CalculationService } from './services/calculation.service';
-          ...
-          providers: [CalculationService],
-          ...
-      3) Then to use, go to your component, import it, and then add the dependency into the constructor
-
-  * Creating Router: // https://www.youtube.com/watch?v=L6ipgij-AUw
-      1) Similar to aboves. Add following to app.modules.ts: //Note import requires an array in argument
-        import { RouterModule} from '@angular/router';
-        ...
-        imports: [
-            ..., RouterModule.forRoot([
-              {
-                path: 'ebay_profit',
-                component: EbayProfitComponent
-              },
-              ...//Add other components
-            ])
-        ...
-
-  * Including bootstrap:
-      1) Follow https://github.com/angular/angular-cli/wiki/stories-include-bootstrap#include-bootstrap
-
-  * Allowing two-way binding:
-      1) Enter do following in app.module.ts:
-        i) import { FormsModule } from '@angular/forms'; //Place in top
-        ii) Place "FormsModule" in imports
-          ex)
-              @NgModule({
-                  imports: [
-                    BrowserModule,
-                    FormsModule
-                  ],
-                  ...
-              })
-
-##### B. How I deployed on heroku.com #####
+##### How to deploy on heroku.com #####
 // Used portions of: https://www.youtube.com/watch?v=MUdFLxveBzI&t=602s
 
   1) Install "heroku CLI"

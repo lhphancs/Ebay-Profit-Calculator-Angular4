@@ -38,9 +38,9 @@ export class EbayProfitComponent implements OnInit {
     for (let i = 1; i <= 16; ++i) {
       this.oz_first_class_array[i - 1] = i;
     }
-    this.ship_option_array = ['USPS First class', 'USPS Flat rate padded envelope'
+    this.ship_option_array = ['USPS First class', 'USPS Flat rate envelope', 'USPS Flat rate padded envelope'
       , 'USPS Flat rate small box', 'USPS Flat rate medium box', 'USPS Flat rate large box'];
-    this.cost_flat_rate_dict = {'USPS Flat rate padded envelope': 6.30
+    this.cost_flat_rate_dict = {'USPS Flat rate envelope': 5.75, 'USPS Flat rate padded envelope': 6.30
       , 'USPS Flat rate small box': 6.25, 'USPS Flat rate medium box': 12.05, 'USPS Flat rate large box': 16.55};
     this.first_class_weight = 8;
     this.response_first_class_weight(this.first_class_weight);
