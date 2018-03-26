@@ -1,6 +1,6 @@
 ##### Profit calculator usage notes #####
   * Profit calculator assumes that buyer pays for shipping
-  * Shipping rates are based on eBay's rate as of 9/14/17
+  * Shipping rates are based on eBay's rate as of 3/25/18
 
 
 ##### How to deploy on heroku.com #####
