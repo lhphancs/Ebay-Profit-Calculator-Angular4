@@ -26,7 +26,8 @@ import { EbayPaypalFeePopoverComponent } from './components/ebay-paypal-fee-popo
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule.forRoot(), RouterModule.forRoot([
-      { path: '', redirectTo: '/ebay-profit', pathMatch: 'full' },
+      { path: '', pathMatch: 'full',
+        component: EbayProfitComponent},
       {
         path: 'ebay-profit',
         component: EbayProfitComponent

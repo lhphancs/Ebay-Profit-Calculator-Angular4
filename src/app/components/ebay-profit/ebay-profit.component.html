@@ -1,5 +1,8 @@
-<a class = "main_page_logo" href="https://www.ebay.com" target="_blank">
-  <img src="../../../assets/img/ebay_logo.png"/></a>
+<div class="container text-center">
+  <a class="inline_block" href="https://www.ebay.com" target="_blank">
+    <img class="main_page_logo" src="../../../assets/img/ebay_logo.png">
+  </a>
+</div>
 
 <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
   <li class="dropdown-header">Dropdown header</li>
@@ -16,7 +19,7 @@
     <div class = "flex center_vertically" [ngClass]="{'border_green_background': !is_profit_mode}">
       <label class="center_vertically green_text">Sale value:</label>
       <div class="input-group short_input margin_left_short" *ngIf="is_profit_mode;else lbl_sale_value">
-        <span class="input-group-addon">$</span>
+        <span class="input-group-addon green_text">$</span>
         <input type="number" step="any" class="form-control green_text" min="0"
                [(ngModel)]="sale_value" (input)="response_update_calculations()">
       </div>
@@ -28,7 +31,7 @@
     <div class = "flex center_vertically">
       <label class="red_text center_vertically margin_left_long">eBay fee percent:</label>
       <div class="input-group short_input margin_left_short">
-        <span class="input-group-addon">%</span>
+        <span class="input-group-addon red_text">%</span>
         <input type="number" step="any" class="form-control red_text" min="0"
                [(ngModel)]="ebay_fee_percent" (input)="response_update_calculations()">
       </div>
@@ -50,7 +53,7 @@
     <app-ebay-paypal-fee-popover class = "margin_left center_vertically"></app-ebay-paypal-fee-popover>
   </div>
 
-  <div class="row flex">
+  <div class="row flex margin_top">
     <label class="red_text center_vertically">Product Cost:</label>
     <div class="margin_left">
       <div class="btn-toolbar margin_top_small" role="toolbar" aria-label="Toolbar with button groups">
@@ -70,15 +73,26 @@
 
       <div class="flex">
         <div class="input-group short_input center_horizontally">
-          <span class="input-group-addon">$</span>
+          <span class="input-group-addon red_text">$</span>
           <input type="number" step="any"
                  class="form-control red_text" min="0"
                  [(ngModel)]="cost_product" (input)="response_update_calculations()">
         </div>
       </div>
     </div>
-  </div>
 
+    <div class = "margin_left_long flex center_vertically red_text">
+      <label class="center_vertically">Misc Cost:</label>
+      <div class="input-group short_input margin_left_short">
+        <span class="input-group-addon red_text">$</span>
+        <input type="number" step="any" class="form-control red_text" min="0"
+               [(ngModel)]="cost_misc" (input)="response_update_calculations()">
+      </div>
+      <ng-template #lbl_cost_misc>
+        <label class = "center_vertically margin_left_short">{{cost_misc | number : '1.2-2'}}</label>
+      </ng-template>
+    </div>
+  </div>
 
   <div class = "row flex margin_top">
     <label class ="center_vertically red_text">Shipping Type:</label>
@@ -95,12 +109,23 @@
                 [selected]="weight === first_class_weight">{{weight}}</option>
       </select>
     </div>
-    <label class = "margin_left center_vertically red_text">$</label>
-    <label class="center_vertically red_text">{{cost_shipping  | number : '1.2-2'}}</label>
 
+    <div class="flex" *ngIf="!show_custom_price_shipping">
+      <label class="margin_left center_vertically red_text">$</label>
+      <label class="center_vertically red_text">{{cost_shipping  | number : '1.2-2'}}</label>
+    </div>
+
+    <div class = "margin_left flex center_vertically" *ngIf="show_custom_price_shipping">
+      <div class="input-group short_input margin_left_short">
+        <span class="input-group-addon red_text">$</span>
+        <input type="number" step="any" class="form-control red_text" min="0"
+                [(ngModel)]="cost_shipping" (input)="response_update_calculations()">
+      </div>
+    </div>
+    
     <app-box-weight-popover class = "margin_left"></app-box-weight-popover>
   </div>
-
+  
   <hr>
   <div class="row flex margin_top">
     <div class = "font_size_med"
@@ -127,6 +152,11 @@
           <td>-</td>
           <td class="text_align_right padding_left_small">{{cost_product | number : '1.2-2'}}</td>
           <td class = "padding_left_small">(Product cost)</td>
+        </tr>
+        <tr class="red_text">
+          <td>-</td>
+          <td class="text_align_right padding_left_small">{{cost_misc | number : '1.2-2'}}</td>
+          <td class = "padding_left_small">(Misc cost)</td>
         </tr>
         <tr class="red_text">
           <td>-</td>

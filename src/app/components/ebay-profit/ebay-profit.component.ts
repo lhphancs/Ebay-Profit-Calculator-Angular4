@@ -20,9 +20,11 @@ export class EbayProfitComponent implements OnInit {
   cost_shipping: number;
   cost_ebay_fee: number;
   cost_paypal_fee: number;
+  cost_misc: number;
   final_profit: number;
 
   show_first_class_shipping: boolean;
+  show_custom_price_shipping: boolean;
   show_box_info: boolean;
   cost_data_service;
   is_profit_mode: boolean;
@@ -34,18 +36,35 @@ export class EbayProfitComponent implements OnInit {
     this.cost_paypal_fee = NaN;
     this.sale_value = NaN;
     this.cost_product = NaN;
+    this.cost_misc = 0;
     this.oz_first_class_array = Array(16); // [1,2, ... 15, 16]
     for (let i = 1; i <= 16; ++i) {
       this.oz_first_class_array[i - 1] = i;
     }
-    this.ship_option_array = ['USPS First class', 'USPS Flat rate envelope', 'USPS Flat rate padded envelope'
-      , 'USPS Flat rate small box', 'USPS Flat rate medium box', 'USPS Flat rate large box'];
-    this.cost_flat_rate_dict = {'USPS Flat rate envelope': 5.75, 'USPS Flat rate padded envelope': 6.30
-      , 'USPS Flat rate small box': 6.25, 'USPS Flat rate medium box': 12.05, 'USPS Flat rate large box': 16.55};
+    this.ship_option_array = [
+      'USPS First class'
+      , 'USPS Flat rate normal envelope'
+      , 'USPS Flat rate legal envelope'
+      , 'USPS Flat rate padded envelope'
+      , 'USPS Flat rate small box'
+      , 'USPS Flat rate medium box'
+      , 'USPS Flat rate large box'
+      , 'Custom shipping cost'
+    ];
+
+    this.cost_flat_rate_dict = {
+      'USPS Flat rate normal envelope': 6.35
+      , 'USPS Flat rate legal envelope': 6.65
+      , 'USPS Flat rate padded envelope': 6.90
+      , 'USPS Flat rate small box': 6.85
+      , 'USPS Flat rate medium box': 12.45
+      , 'USPS Flat rate large box': 17.10
+    };
     this.first_class_weight = 8;
     this.response_first_class_weight(this.first_class_weight);
 
     this.show_first_class_shipping = true;
+    this.show_custom_price_shipping = false;
     this.show_box_info = false;
     this.is_profit_mode = true;
   }
@@ -59,12 +78,25 @@ export class EbayProfitComponent implements OnInit {
   }
 
   response_ship_change(ship_option) {
-    if (ship_option === this.ship_option_array[0]) {
+    if (ship_option === 'USPS First class') {
       this.show_first_class_shipping = true;
+      this.show_custom_price_shipping = false;
       this.response_first_class_weight(this.first_class_weight);
-    } else {
+    }
+    else{
       this.show_first_class_shipping = false;
-      this.cost_shipping = this.cost_flat_rate_dict[ship_option];
+
+      //If they select custom shipping cost
+      if(ship_option === 'Custom shipping cost'){
+        this.show_custom_price_shipping = true;
+        this.cost_shipping = 0;
+      }
+
+      //else they select flat rates
+      else {
+        this.show_custom_price_shipping = false;
+        this.cost_shipping = this.cost_flat_rate_dict[ship_option];
+      }
     }
   }
 
@@ -81,10 +113,11 @@ export class EbayProfitComponent implements OnInit {
       this.cost_ebay_fee = this.cost_data_service.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
       this.cost_paypal_fee = this.cost_data_service.get_paypal_fee(this.sale_value);
       this.final_profit = this.cost_data_service.get_final_profit(this.sale_value
-        , this.cost_ebay_fee, this.cost_paypal_fee, this.cost_product, this.cost_shipping);
+        , this.cost_ebay_fee, this.cost_paypal_fee, this.cost_product
+        , this.cost_misc, this.cost_shipping);
     } else {
       this.sale_value = this.cost_data_service.get_sale_value(this.ebay_fee_percent
-        , this.cost_product, this.cost_shipping, this.final_profit);
+        , this.cost_product, this.cost_misc, this.cost_shipping, this.final_profit);
       this.cost_ebay_fee = this.cost_data_service.get_ebay_fee(this.sale_value, this.ebay_fee_percent);
       this.cost_paypal_fee = this.cost_data_service.get_paypal_fee(this.sale_value);
     }

@@ -1,19 +1,18 @@
 .main_page_logo{
+  display:inline-block;
   padding:10px;
-  margin:10px auto;
+  margin:10px;
   width:100px;
   height:50px;
   border:2px solid #c3c3c3;
   border-radius:3px;
-  display: flex;
-  justify-content: center;
   background-color:#ecf3ff;
 }
 
 .flex_center{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 
 .short_input{
