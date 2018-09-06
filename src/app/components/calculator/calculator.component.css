@@ -1,0 +1,42 @@
+.fee-table{
+    width:250px;
+}
+
+.text-bold{
+    font-weight: bold;
+}
+
+.red-text{
+    color:red;
+}
+
+.green-text{
+    color:green;
+}
+
+.div-inline{
+    display:inline;
+}
+
+.input-profit{
+    width:200px;
+}
+
+.mnu-btn{
+    font-size:0.8em;
+    height: 40px;
+    border: 1px solid grey;
+    background-color:#619cff;
+}
+.mnu-btn:hover{
+    background-color: #dfff30;
+}
+
+.btn-multiplier{
+    background-color: #3f51b5;
+    border-left: 1px solid #86c7fe;
+}
+
+.btn-multiplier:hover{
+    background-color: #6fb2cb;
+}

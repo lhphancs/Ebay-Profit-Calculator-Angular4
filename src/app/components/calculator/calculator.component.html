@@ -1,0 +1,127 @@
+<mat-button-toggle-group #group="matButtonToggleGroup" [(ngModel)]="mode">
+  <mat-button-toggle value="calcProfit">Calculate Profit</mat-button-toggle>
+  <mat-button-toggle value="calcNeededSale" (click)="onCalcNeededSaleClick()">Calculate Needed Sales</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div class="mx-4 mt-4 entire-form" *ngIf="shipCompanies">
+  <div class="form-row">
+    <div class="form-group col-md-2 mr-5">
+      <mat-icon color="primary" matTooltip="Price that you want to sell for"
+        matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+      <label for="saleValue">Sale value</label>
+      <input type="number" step="any" class="form-control" id="saleValue"
+        [(ngModel)]='saleValue' [disabled]="group.value!='calcProfit'"
+        (input)="updateFees(); updateTotalOrSaleValue(group.value)">
+    </div>
+    <div class="form-group col-md-4 mr-5">
+      <mat-icon color="primary" matTooltip="Price that you bought it for"
+        matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+      <label for="productCost">Product cost</label>
+      <input type="number" step="any" class="form-control" id="productCost"
+        [(ngModel)]='productCost' (input)="updateTotalOrSaleValue(group.value)">
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+          <button *ngFor="let multiplier of multiplierArray" (click)="multiplyProductCost(multiplier)"
+            type="button" class="btn btn-sm btn-primary btn-multiplier">{{multiplier}}x
+          </button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button *ngFor="let multiplier of multiplierArray" (click)="multiplyProductCost(1/multiplier)"
+              type="button" class="btn btn-sm btn-primary btn-multiplier">1/{{multiplier}}
+            </button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-2 mr-5">
+      <mat-icon color="primary" matTooltip="(Optional) Cost for box, bag, labels, etc..."
+        matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+      <label for="miscCost">Misc cost</label>
+      <input type="number" step="any" class="form-control" id="miscCost"
+        [(ngModel)]='miscCost' (input)="updateTotalOrSaleValue(group.value)">
+    </div>
+  </div>
+
+  <div class="mt-2" *ngIf="shipCompanies">
+    <div class="div-inline mr-5">
+      <label class="center_vertically mr-1">Shipping Company:</label>
+      <button mat-raised-button color="primary"[matMenuTriggerFor]="menuCompanies">
+        {{shipCompanies[selectedCompanyIndex].name}}
+      </button>
+      <mat-menu #menuCompanies="matMenu">
+        <button class="mnu-btn" *ngFor="let companyObj of shipCompanies; let i=index"
+          mat-menu-item (click)="companySelect(i)">{{companyObj.name}}</button>
+      </mat-menu>
+    </div>
+
+    <div class="div-inline mr-5">
+      <label class="center_vertically mr-1">Method:</label>
+      <mat-icon color="primary" matTooltip="{{shipCompanies[selectedCompanyIndex]['shipMethods'][selectedMethodIndex].description}}"
+        matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+      <button class="ml-1" mat-raised-button color="primary" [matMenuTriggerFor]="menuMethods">
+        {{shipCompanies[selectedCompanyIndex]['shipMethods'][selectedMethodIndex].shipMethodName}}
+      </button>
+      <mat-menu #menuMethods="matMenu">
+        <button class="mnu-btn" *ngFor="let methodObj of shipCompanies[selectedCompanyIndex]['shipMethods']; let i=index"
+          mat-menu-item (click)="methodSelect(i)">{{methodObj.shipMethodName}}</button>
+      </mat-menu>
+    </div>
+    <div class="div-inline mr-5"
+      *ngIf="shipCompanies[selectedCompanyIndex]['shipMethods'][selectedMethodIndex].ozPrice[selectedOzPriceIndex].oz!=-1">
+      <label class="center_vertically mr-1">Weight(oz):</label>
+      <button mat-raised-button color="primary" [matMenuTriggerFor]="menuWeights">
+        {{shipCompanies[selectedCompanyIndex]['shipMethods'][selectedMethodIndex]['ozPrice'][selectedOzPriceIndex].oz}}
+      </button>
+      <mat-menu #menuWeights="matMenu">
+        <button class="mnu-btn" *ngFor="let ozPriceObj of
+            shipCompanies[selectedCompanyIndex]['shipMethods'][selectedMethodIndex]['ozPrice'];
+            let i=index"
+          mat-menu-item (click)="weightSelect(i)">{{ozPriceObj['oz']}}</button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <div class="row mt-4 mx-3 div-right-align">
+    <mat-icon color="primary" matTooltip="Total profit after all costs/fees"
+      matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+    <label for="profit">Profit:</label>
+    <input type="number" step="any"
+      class="input-profit mx-1 form-control {{ totalProfit >= 1 ? 'green-text' : 'red-text'}}" id="profit"
+      [(ngModel)]="totalProfit" [disabled]="group.value=='calcProfit'"
+      type="number" step="any" (input)="updateTotalOrSaleValue(group.value)">
+  </div>
+</div>
+<div class="mt-5 mr-4 div-right-align">
+  <mat-icon color="primary" matTooltip="These values are taken from your &quot;Fees&quot; preferences"
+    matTooltipClass="tooltip-background" class="center-vertically">info</mat-icon>
+  <div class="mr-5">eBay fee percentage = {{ebayPercentageFromSaleFee | number : '1.2-2'}}%</div>
+  <div class="mr-5">Paypal fee percentage = {{paypalPercentageFromSaleFee | number : '1.2-2'}}%</div>
+  <div class="mr-5">Paypal flat fee = ${{paypalFlatFee | number : '1.2-2'}}</div>
+  <table class="table table-bordered fee-table">
+    <tbody>
+      <tr>
+        <th scope="row">Sale Value</th>
+        <td class="text-right green-text">{{saleValue | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Product cost</th>
+        <td class="text-right red-text">{{productCost | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Misc cost</th>
+        <td class="text-right red-text">{{miscCost | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Shipping cost</th>
+        <td class="text-right red-text">{{shippingCost | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Total eBay fee</th>
+        <td class="text-right red-text">{{totalEbayFee | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Total paypal fee</th>
+        <td class="text-right red-text">{{totalPaypalFee | number : '1.2-2'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
