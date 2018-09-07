@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
-import { MatButtonToggleModule, MatIconModule, MatMenuModule, MatTooltipModule } from '@angular/material';
+import { MatButtonToggleModule, MatIconModule, MatMenuModule, MatTooltipModule, MatButtonModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    MatButtonModule,
     MatButtonToggleModule,
     MatIconModule,
     MatMenuModule,
